@@ -1,47 +1,43 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>N.U. Android Apps Laucher</title>
+    <title>N.U. Android Apps Launcher</title>
 </head>
 <body>
 
-<div id="conteudo"></div>
-
 <script>
-    const baseGitHub = "https://nbc-nu.github.io/N.U.-Android-Apps/app-executer?c=";
-
-    window.addEventListener('DOMContentLoaded', () => {
+    (function() {
         const urlParams = new URLSearchParams(window.location.search);
         
-        // 1. EXECUTA SE RECEBER ?c= NA URL (ABRE EM NOVA ABA)
-        const base64Code = urlParams.get('c');
-        if (base64Code) {
+        // 1. SE RECEBER ?code= (CONVERTE PARA BASE64 E ABRE EM NOVA ABA)
+        const linkViaParametro = urlParams.get('code');
+        if (linkViaParametro) {
             try {
-                const linkOriginal = atob(base64Code);
-                const novaAba = window.open(linkOriginal, '_blank');
+                // Transforma o link em Base64
+                const codigoBase64 = btoa(unescape(encodeURIComponent(linkViaParametro)));
                 
-                // Se o navegador bloquear o pop-up, mostra link simples na página em branco
-                if (!novaAba || novaAba.closed || typeof novaAba.closed == 'undefined') {
-                    document.getElementById('conteudo').innerHTML = `<pre>Hey, please permit popups! They are needed to open the app!</pre>`;
-                }
-            } catch (erro) {
-                // Mantém em branco em caso de erro
+                // Monta o link final do GitHub com o parâmetro ?c=
+                const linkFinal = "https://nbc-nu.github.io/N.U.-Android-Apps/app-executer?c=" + codigoBase64;
+                
+                // Abre o link final gerado imediatamente em uma nova aba
+                window.open(linkFinal, '_blank');
+            } catch (e) {
+                console.error("Error while processing.");
             }
             return;
         }
 
-        // 2. EXECUTA SE RECEBER ?code= NA URL (CODIFICA E MOSTRA O LINK LIMPO NA TELA)
-        const linkViaParametro = urlParams.get('code');
-        if (linkViaParametro) {
+        // 2. SE RECEBER ?c= (DECODIFICA O LINK REAL E ABRE EM NOVA ABA)
+        const base64Code = urlParams.get('c');
+        if (base64Code) {
             try {
-                const codigoBase64 = btoa(unescape(encodeURIComponent(linkViaParametro)));
-                document.getElementById('conteudo').innerText = baseGitHub + codigoBase64;
-            } catch (e) {
-                // Mantém em branco em caso de erro
+                const linkOriginal = atob(base64Code);
+                window.open(linkOriginal, '_blank');
+            } catch (erro) {
+                console.error("Error while encoding.");
             }
         }
-    });
+    })();
 </script>
 
 </body>
