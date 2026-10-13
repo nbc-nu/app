@@ -15,7 +15,7 @@
         if (linkViaParametro) {
             try {
                 const codigoBase64 = btoa(unescape(encodeURIComponent(linkViaParametro)));
-                const linkFinal = `https://nbc-nu.github.io/N.U.-Android-Apps/app-executer?c= + {codigoBase64}`;
+                const linkFinal = `https://nbc-nu.github.io/N.U.-Android-Apps/app-executer?c={codigoBase64}`;
                 
                 // Executa exatamente a mesma lógica de abrir e fechar que funcionou no seu PWA
                 window.open(linkFinal, '_blank');
