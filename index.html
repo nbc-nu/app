@@ -10,12 +10,14 @@
     (function() {
         const urlParams = new URLSearchParams(window.location.search);
         
-        // 1. SE RECEBER ?code= (CONVERTE PARA BASE64 E ABRE O LINK DO GITHUB IGUAL SEU CODIGO)
+        // 1. SE RECEBER ?code= (CONVERTE PARA BASE64 E ABRE O LINK DO GITHUB NO APP-EXECUTER)
         const linkViaParametro = urlParams.get('code');
         if (linkViaParametro) {
             try {
                 const codigoBase64 = btoa(unescape(encodeURIComponent(linkViaParametro)));
-                const linkFinal = `https://nbc-nu.github.io/N.U.-Android-Apps/app-executer?c={codigoBase64}`;
+                
+                // LINHA PERFEITA AQUI:
+                const linkFinal = `https://nbc-nu.github.io/N.U.-Android-Apps/app-executer?c=${codigoBase64}`;
                 
                 // Executa exatamente a mesma lógica de abrir e fechar que funcionou no seu PWA
                 window.open(linkFinal, '_blank');
