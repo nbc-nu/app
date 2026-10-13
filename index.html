@@ -10,29 +10,31 @@
     (function() {
         const urlParams = new URLSearchParams(window.location.search);
         
-        // 1. SE RECEBER ?code= (CONVERTE PARA BASE64 E ABRE O LINK DO GITHUB)
+        // 1. SE RECEBER ?code= (CONVERTE PARA BASE64 E ABRE O LINK DO GITHUB IGUAL SEU CODIGO)
         const linkViaParametro = urlParams.get('code');
         if (linkViaParametro) {
             try {
                 const codigoBase64 = btoa(unescape(encodeURIComponent(linkViaParametro)));
-                const linkFinal = "https://nbc-nu.github.io/N.U.-Android-Apps/app-executer?c=" + codigoBase64;
+                const linkFinal = `https://nbc-nu.github.io/N.U.-Android-Apps/app-executer?c= + {codigoBase64}`;
                 
-                // Usando atribuição direta para que o navegador reconheça o escopo do PWA
-                window.location.href = linkFinal;
+                // Executa exatamente a mesma lógica de abrir e fechar que funcionou no seu PWA
+                window.open(linkFinal, '_blank');
+                window.close();
             } catch (e) {
                 console.error("Erro ao processar.");
             }
             return;
         }
 
-        // 2. SE RECEBER ?c= (DECODIFICA O LINK REAL E ABRE O PWA)
+        // 2. SE RECEBER ?c= (DECODIFICA O LINK REAL E ABRE O APP FINAL)
         const base64Code = urlParams.get('c');
         if (base64Code) {
             try {
                 const linkOriginal = atob(base64Code);
                 
-                // Redireciona diretamente na janela atual para ativar o app/PWA instalado
-                window.location.href = linkOriginal;
+                // Abre o link do PWA decodificado e fecha a aba atual
+                window.open(linkOriginal, '_blank');
+                window.close();
             } catch (erro) {
                 console.error("Erro ao decodificar.");
             }
