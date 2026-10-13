@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>N.U. Android Apps Laucher</title>
+</head>
+<body>
+
+<div id="conteudo"></div>
+
+<script>
+    const baseGitHub = "https://nbc-nu.github.io/N.U.-Android-Apps/app-executer?c=";
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // 1. EXECUTA SE RECEBER ?c= NA URL (ABRE EM NOVA ABA)
+        const base64Code = urlParams.get('c');
+        if (base64Code) {
+            try {
+                const linkOriginal = atob(base64Code);
+                const novaAba = window.open(linkOriginal, '_blank');
+                
+                // Se o navegador bloquear o pop-up, mostra link simples na página em branco
+                if (!novaAba || novaAba.closed || typeof novaAba.closed == 'undefined') {
+                    document.getElementById('conteudo').innerHTML = `<pre>Hey, please permit popups! They are needed to open the app!</pre>`;
+                }
+            } catch (erro) {
+                // Mantém em branco em caso de erro
+            }
+            return;
+        }
+
+        // 2. EXECUTA SE RECEBER ?code= NA URL (CODIFICA E MOSTRA O LINK LIMPO NA TELA)
+        const linkViaParametro = urlParams.get('code');
+        if (linkViaParametro) {
+            try {
+                const codigoBase64 = btoa(unescape(encodeURIComponent(linkViaParametro)));
+                document.getElementById('conteudo').innerText = baseGitHub + codigoBase64;
+            } catch (e) {
+                // Mantém em branco em caso de erro
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
